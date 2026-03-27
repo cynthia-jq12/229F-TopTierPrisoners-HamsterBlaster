@@ -1,58 +1,48 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class Slingshot : MonoBehaviour
 {
     private Rigidbody rb;
-    private Vector3 startPos;
-    private bool isShot = false;
+    public TextMeshProUGUI forceUI;
 
-    public TMPro.TextMeshProUGUI forceUI;
-
-    public float baseAcceleration = 500f;
-    public float maxDrag = 3f;
+    public float chargeSpeed = 800f;
+    public float maxForce = 2000f;
+    private float currentForce = 0f;
+    private bool isCharging = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        startPos = transform.position;
     }
 
-    void OnMouseDrag()
+    void Update()
     {
-        if (isShot) return;
+        float h = Input.GetAxis("Horizontal");
+        transform.Rotate(0, h * 100f * Time.deltaTime, 0);
 
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = 10f;
-        Vector3 currentPos = Camera.main.ScreenToWorldPoint(mousePos);
-
-        Vector3 displacement = startPos - currentPos;
-        if (displacement.magnitude > maxDrag)
+        if (Input.GetKey(KeyCode.Space))
         {
-            displacement = displacement.normalized * maxDrag;
+            isCharging = true;
+            currentForce += chargeSpeed * Time.deltaTime;
+            currentForce = Mathf.Clamp(currentForce, 0, maxForce);
         }
-        transform.position = startPos - displacement;
 
-        float a = displacement.magnitude * baseAcceleration;
-        float calculatedForce = rb.mass * a;
-        if (forceUI != null) forceUI.text = "Force (F=ma): " + calculatedForce.ToString("F0") + " N";
+        if (Input.GetKeyUp(KeyCode.Space) && isCharging)
+        {
+            Shoot();
+        }
+
+        if (forceUI != null)
+        {
+            forceUI.text = "Charging Force: " + currentForce.ToString("F0") + " N";
+        }
     }
 
-    void OnMouseUp()
+    void Shoot()
     {
-        if (isShot) return;
-
-        Vector3 displacement = startPos - transform.position;
-
-        float a = displacement.magnitude * baseAcceleration;
-        Vector3 direction = displacement.normalized;
-
-        Vector3 finalForce = direction * (rb.mass * a);
-
-        rb.isKinematic = false;
-        rb.AddForce(finalForce);
-
-        isShot = true;
+        rb.AddForce(transform.forward * currentForce);
+        currentForce = 0f;
+        isCharging = false;
     }
 }
