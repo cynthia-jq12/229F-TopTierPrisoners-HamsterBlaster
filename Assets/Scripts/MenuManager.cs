@@ -42,4 +42,10 @@ public class MenuManager : MonoBehaviour
         PlayerPrefs.DeleteAll();
         UpdateStarDisplay();
     }
+
+    public void QuitGame()
+    {
+        Debug.Log("Game is exiting...");
+        Application.Quit();
+    }
 }

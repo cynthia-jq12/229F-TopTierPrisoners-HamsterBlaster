@@ -16,7 +16,7 @@ public class ScoreManager : MonoBehaviour
     private int currentScore = 0;
     private int maxScore = 0;
     private bool isLevelComplete = false;
-    private bool isTimeUp = false; // เพิ่มตัวแปรเช็กเวลาหมด
+    private bool isTimeUp = false;
 
     void Awake()
     {
@@ -54,7 +54,6 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    // ฟังก์ชันสำหรับให้ TimeManager เรียกเมื่อเวลาหมด
     public void SetTimeUp()
     {
         isTimeUp = true;
@@ -85,7 +84,6 @@ public class ScoreManager : MonoBehaviour
             PlayerPrefs.Save();
         }
 
-        // ถ้าจบเพราะเวลาหมด (isTimeUp = true) จะไม่เปิด winPanel เพื่อไม่ให้ซ้อนกับ GameOver
         if (winPanel != null && !isTimeUp)
         {
             winPanel.SetActive(true);
