@@ -8,7 +8,6 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager instance;
     public TextMeshProUGUI scoreText;
 
-    [Header("Win System")]
     public GameObject winPanel;
     public string mainMenuName = "MainMenu";
     public int levelID;
@@ -39,7 +38,6 @@ public class ScoreManager : MonoBehaviour
         if (isLevelComplete) return;
         currentScore += points;
         UpdateUI();
-
         if (currentScore >= maxScore && maxScore > 0)
         {
             EndLevel();
@@ -49,9 +47,7 @@ public class ScoreManager : MonoBehaviour
     void UpdateUI()
     {
         if (scoreText != null)
-        {
             scoreText.text = $"Score: {currentScore} / {maxScore}";
-        }
     }
 
     public void SetTimeUp()
@@ -66,12 +62,7 @@ public class ScoreManager : MonoBehaviour
         isLevelComplete = true;
 
         int starsEarned = 0;
-        float percentage = 0;
-
-        if (maxScore > 0)
-        {
-            percentage = (float)currentScore / maxScore * 100f;
-        }
+        float percentage = (maxScore > 0) ? (float)currentScore / maxScore * 100f : 0;
 
         if (percentage >= 100) starsEarned = 3;
         else if (percentage >= 70) starsEarned = 2;
@@ -85,9 +76,7 @@ public class ScoreManager : MonoBehaviour
         }
 
         if (winPanel != null && !isTimeUp)
-        {
             winPanel.SetActive(true);
-        }
 
         StartCoroutine(ReturnToMenuRoutine());
     }

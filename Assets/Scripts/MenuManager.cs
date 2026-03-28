@@ -3,11 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-    [Header("Level 1 Stars")]
     public GameObject[] l1Stars;
-    [Header("Level 2 Stars")]
     public GameObject[] l2Stars;
-    [Header("Level 3 Stars")]
     public GameObject[] l3Stars;
 
     void Start()
@@ -37,15 +34,15 @@ public class MenuManager : MonoBehaviour
     public void GoToLevel3() { SceneManager.LoadScene("Level3"); }
     public void GoToCredit() { SceneManager.LoadScene("CreditScene"); }
 
+    public void QuitGame()
+    {
+        Debug.Log("Exiting Game...");
+        Application.Quit();
+    }
+
     public void ResetProgress()
     {
         PlayerPrefs.DeleteAll();
         UpdateStarDisplay();
-    }
-
-    public void QuitGame()
-    {
-        Debug.Log("Game is exiting...");
-        Application.Quit();
     }
 }

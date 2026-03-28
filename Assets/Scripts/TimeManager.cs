@@ -4,22 +4,22 @@ using UnityEngine.SceneManagement;
 
 public class TimeManager : MonoBehaviour
 {
+    public static TimeManager instance;
     public float timeRemaining = 60f;
     public TextMeshProUGUI timerText;
     public GameObject gameOverPanel;
-
     private bool isGameOver = false;
+
+    void Awake() { instance = this; }
 
     void Start()
     {
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(false);
+        if (gameOverPanel != null) gameOverPanel.SetActive(false);
     }
 
     void Update()
     {
         if (isGameOver) return;
-
         if (timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
@@ -42,30 +42,17 @@ public class TimeManager : MonoBehaviour
         }
     }
 
-    void GameOver()
+    public void GameOver()
     {
+        if (isGameOver) return;
         isGameOver = true;
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(true);
-
+        if (gameOverPanel != null) gameOverPanel.SetActive(true);
         Time.timeScale = 0f;
 
-        // เปลี่ยนมาเรียก SetTimeUp เพื่อแจ้ง ScoreManager ว่าเวลาหมดแล้ว
         if (ScoreManager.instance != null)
-        {
             ScoreManager.instance.SetTimeUp();
-        }
     }
 
-    public void RetryLevel()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    public void GoToMainMenu()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
-    }
+    public void RetryLevel() { Time.timeScale = 1f; SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
+    public void GoToMainMenu() { Time.timeScale = 1f; SceneManager.LoadScene("MainMenu"); }
 }
