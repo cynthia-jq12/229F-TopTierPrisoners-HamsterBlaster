@@ -5,11 +5,12 @@ using System.Collections;
 public class BoundaryWarning : MonoBehaviour
 {
     public float timeAllowedOutside = 5f;
+
     public GameObject warningPanel;
     public TextMeshProUGUI countdownText;
 
     private float timeLeft;
-    private bool isOutside = false;
+    private bool isInsideZone = true;
     private Coroutine warningCoroutine;
 
     void Start()
@@ -20,23 +21,38 @@ public class BoundaryWarning : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Boundary"))
+        if (other.CompareTag("SafeZone"))
         {
-            isOutside = true;
-            if (warningPanel != null) warningPanel.SetActive(true);
-            warningCoroutine = StartCoroutine(StartCountdown());
+            Debug.Log("Entered SafeZone: System Secured.");
+            isInsideZone = true;
+            StopWarning();
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Boundary"))
+        if (other.CompareTag("SafeZone"))
         {
-            isOutside = false;
-            if (warningPanel != null) warningPanel.SetActive(false);
-            if (warningCoroutine != null) StopCoroutine(warningCoroutine);
-            timeLeft = timeAllowedOutside;
+            Debug.Log("Exited SafeZone: Starting Countdown...");
+            isInsideZone = false;
+            StartWarning();
         }
+    }
+
+    void StartWarning()
+    {
+        if (warningPanel != null) warningPanel.SetActive(true);
+
+        if (warningCoroutine != null) StopCoroutine(warningCoroutine);
+        warningCoroutine = StartCoroutine(StartCountdown());
+    }
+
+    void StopWarning()
+    {
+        if (warningPanel != null) warningPanel.SetActive(false);
+
+        if (warningCoroutine != null) StopCoroutine(warningCoroutine);
+        timeLeft = timeAllowedOutside;
     }
 
     IEnumerator StartCountdown()
@@ -45,15 +61,19 @@ public class BoundaryWarning : MonoBehaviour
         {
             timeLeft -= Time.deltaTime;
             if (countdownText != null)
-                countdownText.text = "Return to Area in: " + Mathf.Ceil(timeLeft).ToString() + "s";
+            {
+                countdownText.text = "<color=red>RETURN TO ZONE!</color>\n" + Mathf.Ceil(timeLeft).ToString() + "s";
+            }
             yield return null;
         }
-        if (isOutside) GameOverByBoundary();
-    }
 
-    void GameOverByBoundary()
-    {
-        if (TimeManager.instance != null)
-            TimeManager.instance.GameOver();
+        if (!isInsideZone)
+        {
+            Debug.Log("Time Up: Player remained outside the zone.");
+            if (TimeManager.instance != null)
+            {
+                TimeManager.instance.GameOver();
+            }
+        }
     }
 }

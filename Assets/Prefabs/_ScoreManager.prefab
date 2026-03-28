@@ -45,3 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
   scoreText: {fileID: 0}
+  winPanel: {fileID: 0}
+  mainMenuName: MainMenu
+  levelID: 1

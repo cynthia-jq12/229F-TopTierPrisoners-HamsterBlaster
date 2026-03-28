@@ -48,5 +48,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  l2Stars: []
-  l3Stars: []
+  l2Stars:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  l3Stars:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
