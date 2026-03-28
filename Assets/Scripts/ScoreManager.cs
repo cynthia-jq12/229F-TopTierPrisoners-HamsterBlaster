@@ -8,6 +8,7 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager instance;
     public TextMeshProUGUI scoreText;
 
+    [Header("Win System")]
     public GameObject winPanel;
     public string mainMenuName = "MainMenu";
     public int levelID;
@@ -15,6 +16,7 @@ public class ScoreManager : MonoBehaviour
     private int currentScore = 0;
     private int maxScore = 0;
     private bool isLevelComplete = false;
+    private bool isTimeUp = false; // เพิ่มตัวแปรเช็กเวลาหมด
 
     void Awake()
     {
@@ -24,27 +26,23 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
         if (winPanel != null) winPanel.SetActive(false);
-
         TargetObject[] targets = FindObjectsByType<TargetObject>(FindObjectsSortMode.None);
-
         foreach (TargetObject target in targets)
         {
             maxScore += target.scoreValue;
         }
-
         UpdateUI();
     }
 
     public void AddScore(int points)
     {
         if (isLevelComplete) return;
-
         currentScore += points;
         UpdateUI();
 
         if (currentScore >= maxScore && maxScore > 0)
         {
-            WinGame();
+            EndLevel();
         }
     }
 
@@ -56,16 +54,29 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    void WinGame()
+    // ฟังก์ชันสำหรับให้ TimeManager เรียกเมื่อเวลาหมด
+    public void SetTimeUp()
     {
+        isTimeUp = true;
+        EndLevel();
+    }
+
+    public void EndLevel()
+    {
+        if (isLevelComplete) return;
         isLevelComplete = true;
 
         int starsEarned = 0;
-        float percentage = (float)currentScore / maxScore * 100f;
+        float percentage = 0;
+
+        if (maxScore > 0)
+        {
+            percentage = (float)currentScore / maxScore * 100f;
+        }
 
         if (percentage >= 100) starsEarned = 3;
         else if (percentage >= 70) starsEarned = 2;
-        else if (percentage >= 40) starsEarned = 1;
+        else if (percentage >= 1) starsEarned = 1;
 
         int previousStars = PlayerPrefs.GetInt("Level_" + levelID + "_Stars", 0);
         if (starsEarned > previousStars)
@@ -74,7 +85,8 @@ public class ScoreManager : MonoBehaviour
             PlayerPrefs.Save();
         }
 
-        if (winPanel != null)
+        // ถ้าจบเพราะเวลาหมด (isTimeUp = true) จะไม่เปิด winPanel เพื่อไม่ให้ซ้อนกับ GameOver
+        if (winPanel != null && !isTimeUp)
         {
             winPanel.SetActive(true);
         }

@@ -49,6 +49,12 @@ public class TimeManager : MonoBehaviour
             gameOverPanel.SetActive(true);
 
         Time.timeScale = 0f;
+
+        // เปลี่ยนมาเรียก SetTimeUp เพื่อแจ้ง ScoreManager ว่าเวลาหมดแล้ว
+        if (ScoreManager.instance != null)
+        {
+            ScoreManager.instance.SetTimeUp();
+        }
     }
 
     public void RetryLevel()

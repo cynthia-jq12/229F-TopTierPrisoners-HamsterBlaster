@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 public class MenuManager : MonoBehaviour
 {
-    public TextMeshProUGUI level1StarsText;
-    public TextMeshProUGUI level2StarsText;
-    public TextMeshProUGUI level3StarsText;
+    [Header("Level 1 Stars")]
+    public GameObject[] l1Stars;
+    [Header("Level 2 Stars")]
+    public GameObject[] l2Stars;
+    [Header("Level 3 Stars")]
+    public GameObject[] l3Stars;
 
     void Start()
     {
@@ -15,28 +17,25 @@ public class MenuManager : MonoBehaviour
 
     public void UpdateStarDisplay()
     {
-        if (level1StarsText != null) level1StarsText.text = GetStarString(1);
-        if (level2StarsText != null) level2StarsText.text = GetStarString(2);
-        if (level3StarsText != null) level3StarsText.text = GetStarString(3);
+        SetStars(1, l1Stars);
+        SetStars(2, l2Stars);
+        SetStars(3, l3Stars);
     }
 
-    string GetStarString(int id)
+    void SetStars(int id, GameObject[] starImages)
     {
         int stars = PlayerPrefs.GetInt("Level_" + id + "_Stars", 0);
-        string starDisplay = "";
-        for (int i = 0; i < stars; i++) starDisplay += "⭐";
-        return stars == 0 ? "Locked" : starDisplay;
+        for (int i = 0; i < starImages.Length; i++)
+        {
+            if (starImages[i] != null)
+                starImages[i].SetActive(i < stars);
+        }
     }
 
-    public void GoToLevel1()
-    {
-        SceneManager.LoadScene("Level1");
-    }
-
-    public void GoToCredit()
-    {
-        SceneManager.LoadScene("CreditScene");
-    }
+    public void GoToLevel1() { SceneManager.LoadScene("Level1"); }
+    public void GoToLevel2() { SceneManager.LoadScene("Level2"); }
+    public void GoToLevel3() { SceneManager.LoadScene("Level3"); }
+    public void GoToCredit() { SceneManager.LoadScene("CreditScene"); }
 
     public void ResetProgress()
     {
