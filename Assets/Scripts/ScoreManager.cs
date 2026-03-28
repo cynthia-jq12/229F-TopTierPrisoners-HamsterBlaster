@@ -8,7 +8,6 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager instance;
     public TextMeshProUGUI scoreText;
 
-    [Header("Win System")]
     public GameObject winPanel;
     public string mainMenuName = "MainMenu";
     public int levelID;
