@@ -5,7 +5,6 @@ public class MenuManager : MonoBehaviour
 {
     public GameObject[] l1Stars;
     public GameObject[] l2Stars;
-    public GameObject[] l3Stars;
 
     void Start()
     {
@@ -16,7 +15,6 @@ public class MenuManager : MonoBehaviour
     {
         SetStars(1, l1Stars);
         SetStars(2, l2Stars);
-        SetStars(3, l3Stars);
     }
 
     void SetStars(int id, GameObject[] starImages)
@@ -31,7 +29,6 @@ public class MenuManager : MonoBehaviour
 
     public void GoToLevel1() { SceneManager.LoadScene("Level1"); }
     public void GoToLevel2() { SceneManager.LoadScene("Level2"); }
-    public void GoToLevel3() { SceneManager.LoadScene("Level3"); }
     public void GoToCredit() { SceneManager.LoadScene("CreditScene"); }
 
     public void QuitGame()
