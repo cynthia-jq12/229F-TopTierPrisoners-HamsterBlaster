@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GrassSpawner : MonoBehaviour
+public class FoliageSpawner : MonoBehaviour
 {
     public GameObject grassPrefab;
     public int grassCount = 100;
