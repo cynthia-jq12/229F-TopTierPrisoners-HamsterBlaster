@@ -11,6 +11,7 @@ public class ScoreManager : MonoBehaviour
     [Header("Win System")]
     public GameObject winPanel;
     public string mainMenuName = "MainMenu";
+    public int levelID;
 
     private int currentScore = 0;
     private int maxScore = 0;
@@ -33,7 +34,6 @@ public class ScoreManager : MonoBehaviour
         }
 
         UpdateUI();
-        Debug.Log("Max Score for this level: " + maxScore);
     }
 
     public void AddScore(int points)
@@ -60,7 +60,20 @@ public class ScoreManager : MonoBehaviour
     void WinGame()
     {
         isLevelComplete = true;
-        Debug.Log("Level Complete! Full Stars!");
+
+        int starsEarned = 0;
+        float percentage = (float)currentScore / maxScore * 100f;
+
+        if (percentage >= 100) starsEarned = 3;
+        else if (percentage >= 70) starsEarned = 2;
+        else if (percentage >= 40) starsEarned = 1;
+
+        int previousStars = PlayerPrefs.GetInt("Level_" + levelID + "_Stars", 0);
+        if (starsEarned > previousStars)
+        {
+            PlayerPrefs.SetInt("Level_" + levelID + "_Stars", starsEarned);
+            PlayerPrefs.Save();
+        }
 
         if (winPanel != null)
         {
