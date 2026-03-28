@@ -46,6 +46,13 @@ public class TimeManager : MonoBehaviour
     {
         if (isGameOver) return;
         isGameOver = true;
+
+        BoundaryWarning boundary = Object.FindFirstObjectByType<BoundaryWarning>();
+        if (boundary != null)
+        {
+            boundary.DisableWarning();
+        }
+
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
         Time.timeScale = 0f;
 

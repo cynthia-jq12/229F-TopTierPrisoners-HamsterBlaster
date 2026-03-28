@@ -55,6 +55,13 @@ public class BoundaryWarning : MonoBehaviour
         timeLeft = timeAllowedOutside;
     }
 
+    public void DisableWarning()
+    {
+        if (warningCoroutine != null) StopCoroutine(warningCoroutine);
+        if (warningPanel != null) warningPanel.SetActive(false);
+        isInsideZone = true;
+    }
+
     IEnumerator StartCountdown()
     {
         while (timeLeft > 0)
