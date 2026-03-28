@@ -7,7 +7,6 @@ public class Slingshot : MonoBehaviour
     private LineRenderer line;
     public TextMeshProUGUI forceUI;
 
-    [Header("Settings")]
     public float chargeSpeed = 1000f;
     public float maxForce = 3000f;
     private float currentForce = 0f;
@@ -37,13 +36,14 @@ public class Slingshot : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space) && isCharging)
         {
-            line.enabled = false;
             Shoot();
         }
 
         if (forceUI != null)
         {
-            forceUI.text = "Force: " + currentForce.ToString("F0") + " N";
+            float acceleration = currentForce / rb.mass;
+
+            forceUI.text = "Acceleration: " + acceleration.ToString("F1") + " m/s2 " + "Mass: " + rb.mass + " kg " + "Force: " + currentForce.ToString("F0") + " N";
         }
     }
 
@@ -56,6 +56,7 @@ public class Slingshot : MonoBehaviour
 
     void Shoot()
     {
+        line.enabled = false;
         rb.AddForce(transform.forward * currentForce);
         currentForce = 0f;
         isCharging = false;
