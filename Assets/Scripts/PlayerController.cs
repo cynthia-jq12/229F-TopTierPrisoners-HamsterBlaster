@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class Slingshot : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     private Rigidbody rb;
     private LineRenderer line;
